@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sally Joy Camps - Ticketing System</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: #667eea;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-success {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #45a049;
+    }
+
+    .btn-danger {
+      background: #f44336;
+      color: white;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .ticket-preview {
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+
+    .ticket-preview img {
+      max-width: 200px;
+      margin: 20px 0;
+    }
+
+    .ticket-details {
+      text-align: left;
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 6px;
+    }
+
+    .ticket-details p {
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 2.5em;
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      opacity: 0.9;
+      font-size: 0.9em;
+    }
+
+    .tickets-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .tickets-table th {
+      background: #f5f5f5;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tickets-table td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .status-active {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .status-checked {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+
+    .camera-container {
+      position: relative;
+      background: black;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    .qr-result {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .success-animation {
+      animation: pulse 0.6s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Main App Component
+    function TicketingApp() {
+      const [activeTab, setActiveTab] = useState('admin');
+      const [apiUrl] = useState('http://localhost:5000/api');
+
+      return (
+        <div className="container">
+          <div className="header">
+            <h1>🎫 Sally Joy Camps</h1>
+            <p>George Lilanda Edition • October 31st, 2026</p>
+          </div>
+
+          <div className="tabs">
+            <button 
+              className={`tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
+              onClick={() => setActiveTab('admin')}
+            >
+              📊 Admin Panel
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'checkin' ? 'active' : ''}`}
+              onClick={() => setActiveTab('checkin')}
+            >
+              ✅ Check-in
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveTab('dashboard')}
+            >
+              📈 Dashboard
+            </button>
+          </div>
+
+          {activeTab === 'admin' && <AdminPanel apiUrl={apiUrl} />}
+          {activeTab === 'checkin' && <CheckinApp apiUrl={apiUrl} />}
+          {activeTab === 'dashboard' && <Dashboard apiUrl={apiUrl} />}
+        </div>
+      );
+    }
+
+    // Admin Panel - Create Tickets
+    function AdminPanel({ apiUrl }) {
+      const [formData, setFormData] = useState({
+        customer_name: '',
+        customer_phone: '',
+        ticket_type: 'K80',
+        payment_method: 'bank_transfer'
+      });
+      const [loading, setLoading] = useState(false);
+      const [message, setMessage] = useState('');
+      const [ticket, setTicket] = useState(null);
+
+      const ticketPrices = {
+        'K50': 50,
+        'K80': 80,
+        'K150': 150
+      };
+
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+          ...prev,
+          [name]: value
+        }));
+      };
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setMessage('');
+
+        try {
+          const response = await fetch(`${apiUrl}/tickets/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...formData,
+              amount: ticketPrices[formData.ticket_type]
+            })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            setMessage('✅ Ticket created successfully!');
+            setTicket(data.ticket);
+            setFormData({
+              customer_name: '',
+              customer_phone: '',
+              ticket_type: 'K80',
+              payment_method: 'bank_transfer'
+            });
+          } else {
+            setMessage(`❌ Error: ${data.error}`);
+          }
+        } catch (err) {
+          setMessage(`❌ Error: ${err.message}`);
+        }
+
+        setLoading(false);
+      };
+
+      return (
+        <div className="card">
+          <h2>🎫 Generate Ticket</h2>
+          <p style={{ marginTop: '10px', marginBottom: '20px', color: '#666' }}>
+            Verify payment first, then generate ticket with QR code
+          </p>
+
+          {message && (
+            <div className={`alert ${message.includes('✅') ? 'alert-success' : 'alert-error'}`}>
+              {message}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Customer Name *</label>
+                <input
+                  type="text"
+                  name="customer_name"
+                  value={formData.customer_name}
+                  onChange={handleChange}
+                  placeholder="e.g., John Banda"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number *</label>
+                <input
+                  type="tel"
+                  name="customer_phone"
+                  value={formData.customer_phone}
+                  onChange={handleChange}
+                  placeholder="e.g., +260977123456"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Ticket Type *</label>
+                <select
+                  name="ticket_type"
+                  value={formData.ticket_type}
+                  onChange={handleChange}
+                >
+                  <option value="K50">Early Bird - K50</option>
+                  <option value="K80">Regular - K80</option>
+                  <option value="K150">VIP - K150</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Payment Method *</label>
+                <select
+                  name="payment_method"
+                  value={formData.payment_method}
+                  onChange={handleChange}
+                >
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="mobile_money">Mobile Money</option>
+                  <option value="cash">Cash</option>
+                  <option value="whatsapp_transfer">WhatsApp Transfer</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? '⏳ Generating...' : '✨ Create Ticket with QR'}
+            </button>
+          </form>
+
+          {ticket && (
+            <div className="ticket-preview">
+              <h3>🎉 Ticket Generated!</h3>
+              <img src={ticket.qrCode} alt="QR Code" />
+              <div className="ticket-details">
+                <p><strong>Ticket ID:</strong> {ticket.ticketId}</p>
+                <p><strong>Name:</strong> {ticket.customerName}</p>
+                <p><strong>Phone:</strong> {ticket.customerPhone}</p>
+                <p><strong>Type:</strong> {ticket.type}</p>
+                <p><strong>Amount:</strong> K{ticket.amount}</p>
+                <p style={{ marginTop: '15px', fontSize: '0.9em', color: '#666' }}>
+                  📧 Send this QR code via WhatsApp/Email to customer for check-in
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Check-in App
+    function CheckinApp({ apiUrl }) {
+      const [mode, setMode] = useState('camera');
+      const [manualQR, setManualQR] = useState('');
+      const [message, setMessage] = useState('');
+      const videoRef = useRef(null);
+      const canvasRef = useRef(null);
+      const [scanning, setScanning] = useState(false);
+
+      const checkInTicket = async (qrData) => {
+        try {
+          const response = await fetch(`${apiUrl}/checkin/scan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              qrData: qrData,
+              staffName: 'Staff'
+            })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            setMessage(`✅ ${data.ticket.name} checked in! (${data.ticket.type})`);
+            setTimeout(() => setMessage(''), 3000);
+          } else {
+            setMessage(`⚠️ ${data.error}`);
+            setTimeout(() => setMessage(''), 3000);
+          }
+        } catch (err) {
+          setMessage(`❌ Error: ${err.message}`);
+        }
+      };
+
+      useEffect(() => {
+        if (mode === 'camera' && !scanning) {
+          startCamera();
+        }
+      }, [mode]);
+
+      const startCamera = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            setScanning(true);
+            scanQRCode();
+          }
+        } catch (err) {
+          setMessage(`❌ Camera access denied: ${err.message}`);
+        }
+      };
+
+      const scanQRCode = () => {
+        if (videoRef.current && canvasRef.current) {
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext('2d');
+          const video = videoRef.current;
+
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+          if (code) {
+            checkInTicket(code.data);
+            setScanning(false);
+          } else {
+            if (scanning) requestAnimationFrame(scanQRCode);
+          }
+        }
+      };
+
+      const handleManualSubmit = () => {
+        if (manualQR.trim()) {
+          checkInTicket(manualQR);
+          setManualQR('');
+        }
+      };
+
+      return (
+        <div className="card">
+          <h2>✅ Check-in Attendees</h2>
+          <p style={{ marginTop: '10px', marginBottom: '20px', color: '#666' }}>
+            Scan QR codes or enter ticket ID manually
+          </p>
+
+          {message && (
+            <div className={`alert ${message.includes('✅') ? 'alert-success' : 'alert-error'}`}>
+              {message}
+            </div>
+          )}
+
+          <div className="tabs" style={{ marginBottom: '20px' }}>
+            <button 
+              className={`tab-btn ${mode === 'camera' ? 'active' : ''}`}
+              onClick={() => setMode('camera')}
+            >
+              📱 Camera Scan
+            </button>
+            <button 
+              className={`tab-btn ${mode === 'manual' ? 'active' : ''}`}
+              onClick={() => setMode('manual')}
+            >
+              ⌨️ Manual Entry
+            </button>
+          </div>
+
+          {mode === 'camera' && (
+            <div className="camera-container">
+              <video ref={videoRef} autoPlay playsInline style={{ width: '100%' }} />
+              <canvas ref={canvasRef} style={{ display: 'none' }} />
+            </div>
+          )}
+
+          {mode === 'manual' && (
+            <div className="form-group">
+              <label>Ticket ID or QR Data</label>
+              <input
+                type="text"
+                value={manualQR}
+                onChange={(e) => setManualQR(e.target.value)}
+                placeholder="Paste QR data or ticket ID"
+                onKeyPress={(e) => e.key === 'Enter' && handleManualSubmit()}
+              />
+              <button 
+                type="button" 
+                className="btn-success" 
+                onClick={handleManualSubmit}
+                style={{ marginTop: '10px' }}
+              >
+                Check In
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Dashboard
+    function Dashboard({ apiUrl }) {
+      const [stats, setStats] = useState(null);
+      const [revenue, setRevenue] = useState(null);
+      const [tickets, setTickets] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+        fetchData();
+        const interval = setInterval(fetchData, 5000);
+        return () => clearInterval(interval);
+      }, []);
+
+      const fetchData = async () => {
+        try {
+          const [statsRes, revenueRes, ticketsRes] = await Promise.all([
+            fetch(`${apiUrl}/admin/stats`),
+            fetch(`${apiUrl}/admin/revenue`),
+            fetch(`${apiUrl}/admin/tickets`)
+          ]);
+
+          const statsData = await statsRes.json();
+          const revenueData = await revenueRes.json();
+          const ticketsData = await ticketsRes.json();
+
+          setStats(statsData);
+          setRevenue(revenueData);
+          setTickets(ticketsData);
+          setLoading(false);
+        } catch (err) {
+          console.error('Error fetching data:', err);
+        }
+      };
+
+      if (loading) return <div className="card">Loading...</div>;
+
+      return (
+        <div>
+          {stats && (
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>{stats.total_tickets || 0}</h3>
+                <p>Total Tickets</p>
+              </div>
+              <div className="stat-card">
+                <h3>{stats.checked_in || 0}</h3>
+                <p>Checked In</p>
+              </div>
+              <div className="stat-card">
+                <h3>{stats.not_checked_in || 0}</h3>
+                <p>Not Checked In</p>
+              </div>
+              <div className="stat-card">
+                <h3>K{stats.total_revenue || 0}</h3>
+                <p>Total Revenue</p>
+              </div>
+            </div>
+          )}
+
+          {revenue && (
+            <div className="card">
+              <h2>💰 Revenue by Ticket Type</h2>
+              <table className="tickets-table">
+                <thead>
+                  <tr>
+                    <th>Ticket Type</th>
+                    <th>Sold</th>
+                    <th>Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {revenue.map((item, idx) => (
+                    <tr key={idx}>
+                      <td>{item.ticket_type}</td>
+                      <td>{item.count}</td>
+                      <td>K{item.revenue}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div className="card">
+            <h2>📋 All Tickets</h2>
+            <table className="tickets-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Type</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tickets.slice(0, 20).map((ticket, idx) => (
+                  <tr key={idx}>
+                    <td>{ticket.customer_name}</td>
+                    <td>{ticket.customer_phone}</td>
+                    <td>{ticket.ticket_type}</td>
+                    <td>K{ticket.price}</td>
+                    <td>
+                      <span className={`status-badge ${ticket.status === 'checked_in' ? 'status-checked' : 'status-active'}`}>
+                        {ticket.status === 'checked_in' ? '✅ Checked In' : '⏳ Active'}
+                      </span>
+                    </td>
+                    <td>{new Date(ticket.created_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<TicketingApp />, document.getElementById('root'));
+  </script>
+</body>
+</html>

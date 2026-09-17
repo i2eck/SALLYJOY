@@ -1,0 +1,122 @@
+┌─────────────────────────────────────────────────────────────┐
+│    🎫 SALLY JOY CAMPS - SELLER QUICK REFERENCE CARD       │
+└─────────────────────────────────────────────────────────────┘
+
+APP LINK:
+  http://192.168.1.10:5000/app.html (Local)
+  OR
+  https://sally-joy-camps-xyz.railway.app/app.html (Online)
+
+═══════════════════════════════════════════════════════════════
+
+SELLING A TICKET (3 STEPS):
+
+1️⃣  Customer pays K50, K80, or K150
+2️⃣  Tap 🎟️ "Sell Ticket"
+3️⃣  Enter: Name, Phone, Type, Payment Method
+4️⃣  Tap "Generate & Share Ticket"
+
+═══════════════════════════════════════════════════════════════
+
+GIVE TICKET TO CUSTOMER (PICK ONE):
+
+📱 WhatsApp (BEST)
+   → Click "Send WhatsApp"
+   → Share with customer
+   → Done!
+
+🖨️ Print
+   → Click "Print"
+   → Give printed QR to customer
+
+📲 Show on Phone
+   → Click "Show Customer"
+   → They screenshot it
+
+═══════════════════════════════════════════════════════════════
+
+TICKET PRICES:
+
+⭐ K50  - Early Bird
+🎟️ K80  - Regular (Most popular)
+👑 K150 - VIP
+
+═══════════════════════════════════════════════════════════════
+
+YOUR STATS (Auto-updates):
+
+🎟️ Sold Today    → How many you sold
+💰 Revenue       → Your total earnings
+
+═══════════════════════════════════════════════════════════════
+
+OTHER TABS:
+
+✅ Check-In       → Scan QR codes at event
+📊 Dashboard      → See all sales (all booths)
+⚙️ Settings       → Sign out
+
+═══════════════════════════════════════════════════════════════
+
+PAYMENT METHODS:
+
+When customer pays, select:
+  • Cash
+  • Mobile Money (MTN/Airtel)
+  • Bank Transfer
+  • WhatsApp Transfer
+
+═══════════════════════════════════════════════════════════════
+
+PROBLEM SOLUTIONS:
+
+❓ App won't load
+   → Check WiFi/Internet
+   → Try again in 5 seconds
+   → Contact manager
+
+❓ Can't send WhatsApp
+   → Install WhatsApp on phone
+   → Try "Show on Phone" instead
+
+❓ QR won't scan
+   → Try "Manual Entry"
+   → Type ticket ID
+
+❓ Need to sign in again
+   → Tap Settings
+   → Sign in with your name & location
+
+═══════════════════════════════════════════════════════════════
+
+IMPORTANT REMINDERS:
+
+✅ Verify payment BEFORE generating ticket
+✅ Double-check customer name & phone
+✅ Choose ticket type correctly
+✅ Keep phone charged
+✅ Stay on WiFi (if local)
+✅ Close app when done
+
+═══════════════════════════════════════════════════════════════
+
+WHAT'S YOUR BOOTH NAME?
+
+Write it here: ____________________
+
+WHO'S YOUR MANAGER?
+
+Write here: _______________________
+
+BACKUP PERSON:
+
+Write here: _______________________
+
+═══════════════════════════════════════════════════════════════
+
+🎉 YOU'RE A SALLY JOY CAMPS TICKET SELLER!
+
+Questions? Ask your manager.
+Ready to sell? Open the app and sign in!
+
+═══════════════════════════════════════════════════════════════

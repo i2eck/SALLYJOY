@@ -1,0 +1,160 @@
+🎫 SALLY JOY CAMPS MULTI-SELLER TICKETING SYSTEM - QUICK START
+==============================================================
+
+STEP 1: Open Terminal/Command Prompt
+
+STEP 2: Navigate to project folder
+  cd /path/to/sally-joy-camps-ticketing
+  
+STEP 3: Install dependencies (first time only)
+  npm install
+  
+STEP 4: Start the server
+  npm start
+  
+STEP 5: Open in browser
+  http://localhost:5000/app.html
+  
+That's it! You should see the ticketing app.
+
+=====================================
+
+IF PORT 5000 IS ALREADY IN USE:
+
+  PORT=3000 npm start
+  
+Then visit: http://localhost:3000/app.html
+
+=====================================
+
+SYSTEM OVERVIEW:
+
+🎫 SELLER APP (http://localhost:5000/app.html)
+  Tab 1: Sell Tickets
+  → Sign in with your name & location
+  → Customer pays → Enter their details
+  → Generate ticket with QR code
+  → Send via WhatsApp, Print, or Show on Phone
+
+✅ CHECK-IN APP (http://localhost:5000/app.html)
+  Tab 2: Check-In
+  → Scan QR codes with phone camera
+  → Or enter ticket ID manually
+  → System marks them as checked-in instantly
+
+📊 DASHBOARD (http://localhost:5000/app.html)
+  Tab 3: Dashboard
+  → See total tickets sold (all locations)
+  → Track attendance in real-time
+  → View revenue by ticket type
+  → See all attendees list
+
+⚙️ SETTINGS (http://localhost:5000/app.html)
+  Tab 4: Settings
+  → Sign out seller account
+
+=====================================
+
+MULTI-LOCATION WORKFLOW:
+
+Location 1 (Booth at Gate)
+  → John opens app on his phone
+  → Signs in: "John" + "Main Gate"
+  → Sells tickets → Shares QR codes
+
+Location 2 (Booth at Entrance)
+  → Mary opens app on her phone
+  → Signs in: "Mary" + "Side Entrance"
+  → Sells tickets → Shares QR codes
+
+Both sellers can work at same time!
+Dashboard shows combined sales from everywhere.
+
+=====================================
+
+HOW TO GIVE CUSTOMER THEIR TICKET:
+
+Option 1: WhatsApp (Easiest)
+  → Click "Send WhatsApp" button
+  → Share link with customer
+  → Customer clicks link → Gets ticket
+
+Option 2: Print
+  → Click "Print" button
+  → Print QR code + customer details
+  → Give printed ticket to customer
+
+Option 3: Show on Phone
+  → Click "Show Customer"
+  → Show them the QR code
+  → They screenshot it
+  → They save to their phone
+
+=====================================
+
+TICKET PRICES:
+
+K50 - Early Bird
+K80 - Regular  
+K150 - VIP
+
+=====================================
+
+PAYMENT FLOW:
+
+1. Customer pays (WhatsApp, bank, mobile money, cash)
+2. You verify payment
+3. Customer gives you their name & phone
+4. You create ticket in Admin Panel
+5. System generates QR code
+6. Send QR image to customer
+7. At event: Customer shows QR code
+8. You scan it in Check-in app ✅
+
+=====================================
+
+TROUBLESHOOTING:
+
+Camera not working?
+  → Use Manual Entry instead
+  → Or make sure browser has camera permission
+
+Port already in use?
+  → Change PORT: PORT=3000 npm start
+
+Database issues?
+  → Delete tickets.db and restart
+  → rm tickets.db (Mac/Linux)
+  → del tickets.db (Windows)
+
+Need to stop server?
+  → Press CTRL+C in terminal
+
+Need to check data?
+  → Open tickets.db with SQLite viewer
+  → Or check Dashboard in browser
+
+=====================================
+
+DEPLOYMENT (Optional):
+
+Railway.app (Recommended):
+  1. Sign up at railway.app
+  2. Connect your GitHub repo
+  3. Deploy with one click
+
+Heroku:
+  1. Sign up at heroku.com
+  2. heroku create your-app-name
+  3. git push heroku main
+
+Local Network:
+  → Get your computer's IP address
+  → Others can access: http://YOUR_IP:5000
+  → Keep computer on during event
+
+=====================================
+
+SUPPORT: Check README.md for full documentation
+
+Good luck with Sally Joy Camps! 🎉

@@ -1,14 +1,1186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sally Joy Camps Ticketing</title>
-  <script>
-    window.location.href = '/app.html';
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1A2B3D">
+  <meta name="description" content="Sally Joy Camps - Professional Ticketing System">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sally Joy">
+  
+  <title>Sally Joy Camps - Ticketing</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23FF6B35' width='192' height='192'/><text x='96' y='120' font-size='100' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'>🎫</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23FF6B35' width='180' height='180'/><text x='90' y='135' font-size='90' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'>🎫</text></svg>">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js"></script>
+  
+  <style>
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --primary-light: #FFB3A0;
+      --navy: #1A2B3D;
+      --navy-light: #2D3E52;
+      --surface: #FFFFFF;
+      --surface-alt: #F8F9FB;
+      --text-primary: #1A2B3D;
+      --text-secondary: #5F6D7B;
+      --text-tertiary: #A0ADB5;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --gold: #D4AF37;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--surface-alt);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 540px;
+      margin: 0 auto;
+      background: var(--surface);
+      position: relative;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: white;
+      padding: 12px 20px 8px;
+      border-bottom: 1px solid rgba(255, 107, 53, 0.1);
+      flex-shrink: 0;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 0.8em;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-icon {
+      font-size: 1.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-text h1 {
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .header-text p {
+      font-size: 0.75em;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .header-btn:active {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.95);
+    }
+
+    /* MAIN CONTENT */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .page.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* METRICS SECTION */
+    .metrics-container {
+      padding: 16px 16px 0;
+      background: linear-gradient(180deg, rgba(255, 107, 53, 0.04) 0%, transparent 100%);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .metric:active {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-icon {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .metric-value {
+      font-size: 2em;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .metric-label {
+      font-size: 0.75em;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* SECTION */
+    .section {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 0.85em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    /* FORM */
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      font-size: 0.85em;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .form-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input-icon {
+      position: absolute;
+      left: 12px;
+      font-size: 1.1em;
+      color: var(--text-secondary);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px 12px 11px 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95em;
+      font-family: inherit;
+      font-weight: 500;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--surface);
+      transition: all 0.2s ease;
+      color: var(--text-primary);
+    }
+
+    input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231A2B3D' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    /* PRIMARY CTA */
+    .btn-primary {
+      width: 100%;
+      padding: 13px 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95em;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:active {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.35);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      display: flex;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      gap: 4px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--text-tertiary);
+      transition: all 0.2s ease;
+      font-size: 0.75em;
+      font-weight: 600;
+    }
+
+    .nav-item-icon {
+      font-size: 1.4em;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active .nav-item-icon {
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    /* CARD SECTION */
+    .card-section {
+      background: var(--surface);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 0 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-section-header {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.06) 0%, rgba(26, 43, 61, 0.03) 100%);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+
+    .card-section-icon {
+      font-size: 1.2em;
+    }
+
+    .card-section-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* SCANNER PAGE */
+    #scanner-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    #html5-qrcode {
+      width: 100% !important;
+      max-width: 500px !important;
+    }
+
+    /* TICKET MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .ticket-modal {
+      background: var(--surface);
+      border-radius: 20px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .ticket-card {
+      background: linear-gradient(135deg, #2D2D2D 0%, #1A1A1A 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticket-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+    }
+
+    .ticket-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px dashed var(--gold);
+      padding-bottom: 15px;
+    }
+
+    .ticket-type {
+      color: var(--gold);
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .ticket-number {
+      color: #AAA;
+      font-size: 0.85em;
+      letter-spacing: 1px;
+    }
+
+    .ticket-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      color: var(--gold);
+      font-size: 0.7em;
+    }
+
+    .ticket-divider::before,
+    .ticket-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: dashed var(--gold);
+    }
+
+    .ticket-qr {
+      text-align: center;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(212, 175, 55, 0.1);
+      border-radius: 12px;
+    }
+
+    .ticket-qr img {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 4px;
+      background: white;
+    }
+
+    .ticket-qr canvas {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 4px;
+      background: white;
+    }
+
+    .ticket-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .ticket-info-item {
+      color: #CCC;
+    }
+
+    .ticket-info-label {
+      font-size: 0.7em;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .ticket-info-value {
+      font-size: 1em;
+      font-weight: 700;
+      color: white;
+      word-break: break-all;
+    }
+
+    .ticket-footer {
+      text-align: center;
+      color: var(--gold);
+      font-size: 0.85em;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      font-style: italic;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 0 20px 20px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9em;
+    }
+
+    .modal-btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+    }
+
+    .modal-btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .modal-btn-secondary {
+      background: var(--surface-alt);
+      color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+
+    .modal-btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      font-size: 1.2em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .close-modal:active {
+      transform: scale(0.9);
+    }
+
+    @media (max-width: 360px) {
+      .app-container { max-width: 100%; }
+      .header { padding: 10px 16px 6px; }
+      .header-text h1 { font-size: 1em; }
+      input, select { font-size: 16px; }
+    }
+
+    .content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .content::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to Sally Joy Camps Ticketing System...</p>
+  <div class="app-container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>●●●●●●</span>
+      </div>
+      <div class="header-content">
+        <div class="header-brand">
+          <div class="header-icon"><i class="fas fa-ticket"></i></div>
+          <div class="header-text">
+            <h1>Sally Joy</h1>
+            <p>Camps Ticketing</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="header-btn" id="installBtn" style="display: none;"><i class="fas fa-download"></i></button>
+          <button class="header-btn"><i class="fas fa-bell"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <!-- SELL PAGE -->
+      <div id="sell-page" class="page active">
+        <div class="metrics-container">
+          <div class="metrics">
+            <div class="metric">
+              <span class="metric-icon"><i class="fas fa-ticket"></i></span>
+              <div class="metric-value">0</div>
+              <div class="metric-label">Sold Today</div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon"><i class="fas fa-money-bill-wave"></i></span>
+              <div class="metric-value">K0</div>
+              <div class="metric-label">Revenue</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="card-section">
+            <div class="card-section-header">
+              <span class="card-section-icon"><i class="fas fa-plus-circle"></i></span>
+              Sell Ticket
+            </div>
+            <div class="card-section-content">
+              <div class="form">
+                <div class="form-group">
+                  <label class="form-label">Customer Name</label>
+                  <div class="form-input-wrapper">
+                    <span class="form-input-icon"><i class="fas fa-user"></i></span>
+                    <input type="text" placeholder="Full name" id="customerName">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Phone Number</label>
+                  <div class="form-input-wrapper">
+                    <span class="form-input-icon"><i class="fas fa-phone"></i></span>
+                    <input type="tel" placeholder="+260977123456" id="phoneNumber">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Ticket Type</label>
+                  <div class="form-input-wrapper">
+                    <span class="form-input-icon"><i class="fas fa-tag"></i></span>
+                    <select id="ticketType">
+                      <option>Select ticket type</option>
+                      <option value="50">Early Bird - K50</option>
+                      <option value="80">Normal - K80</option>
+                      <option value="150">VIP - K150</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Payment Method</label>
+                  <div class="form-input-wrapper">
+                    <span class="form-input-icon"><i class="fas fa-money-bill"></i></span>
+                    <select id="paymentMethod">
+                      <option>Select payment method</option>
+                      <option>Cash</option>
+                      <option>Mobile Money</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button class="btn-primary" id="generateBtn">
+                  <span><i class="fas fa-spark"></i></span>
+                  Generate & Share Ticket
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Quick Actions</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <button style="padding: 12px 16px; background: var(--surface-alt); border: 1.5px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="switchPage('dashboard')">
+              <i class="fas fa-chart-bar" style="color: var(--primary);"></i> Dashboard
+            </button>
+            <button style="padding: 12px 16px; background: var(--surface-alt); border: 1.5px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="switchPage('checkin')">
+              <i class="fas fa-check-circle" style="color: var(--success);"></i> Check-in
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECK-IN PAGE WITH SCANNER -->
+      <div id="checkin-page" class="page" style="padding: 16px;">
+        <div class="section-title" style="margin-top: 16px;">Scan Ticket QR Code</div>
+        <div id="scanner-container" style="margin-bottom: 16px;"></div>
+        <div style="background: var(--surface-alt); border-radius: 10px; padding: 12px; font-size: 0.85em; color: var(--text-secondary); line-height: 1.5;">
+          <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 6px;"></i> Point camera at QR code to check in attendees
+        </div>
+      </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div id="dashboard-page" class="page">
+        <div class="metrics-container" style="padding: 20px 16px;">
+          <div class="metrics">
+            <div class="metric">
+              <span class="metric-icon"><i class="fas fa-ticket"></i></span>
+              <div class="metric-value" id="dashSold">0</div>
+              <div class="metric-label">Sold Today</div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon"><i class="fas fa-money-bill-wave"></i></span>
+              <div class="metric-value" id="dashRevenue">K0</div>
+              <div class="metric-label">Revenue</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="padding-bottom: 100px;">
+          <div class="section-title">Ticket Sales Breakdown</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: var(--surface-alt); border-radius: 10px; padding: 12px 16px; border-left: 4px solid #4F46E5;">
+              <div style="font-size: 0.75em; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Early Bird - K50</div>
+              <div style="font-size: 1.3em; font-weight: 700; color: var(--primary);" id="dashEarlyBird">0</div>
+            </div>
+            <div style="background: var(--surface-alt); border-radius: 10px; padding: 12px 16px; border-left: 4px solid #06B6D4;">
+              <div style="font-size: 0.75em; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Normal - K80</div>
+              <div style="font-size: 1.3em; font-weight: 700; color: var(--text-primary);" id="dashNormal">0</div>
+            </div>
+            <div style="background: var(--surface-alt); border-radius: 10px; padding: 12px 16px; border-left: 4px solid var(--gold);">
+              <div style="font-size: 0.75em; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">VIP - K150</div>
+              <div style="font-size: 1.3em; font-weight: 700; color: var(--gold);" id="dashVIP">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="switchPage('sell')">
+        <span class="nav-item-icon"><i class="fas fa-ticket"></i></span>
+        <span>Sell</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('checkin')">
+        <span class="nav-item-icon"><i class="fas fa-check-circle"></i></span>
+        <span>Check-in</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('dashboard')">
+        <span class="nav-item-icon"><i class="fas fa-chart-bar"></i></span>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('settings')">
+        <span class="nav-item-icon"><i class="fas fa-cog"></i></span>
+        <span>Settings</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TICKET MODAL -->
+  <div class="modal-overlay" id="ticketModal">
+    <button class="close-modal" onclick="closeTicket()"><i class="fas fa-times"></i></button>
+    <div class="ticket-modal">
+      <div style="padding: 20px;">
+        <div class="ticket-card">
+          <div class="ticket-header">
+            <div class="ticket-type" id="ticketTypeDisplay">VIP TICKET</div>
+            <div class="ticket-number" id="ticketNumberDisplay">Nomor: A001</div>
+          </div>
+
+          <div class="ticket-qr">
+            <div id="qrContainer"></div>
+          </div>
+
+          <div class="ticket-info">
+            <div class="ticket-info-item">
+              <div class="ticket-info-label">Name</div>
+              <div class="ticket-info-value" id="ticketNameDisplay">---</div>
+            </div>
+            <div class="ticket-info-item">
+              <div class="ticket-info-label">Phone</div>
+              <div class="ticket-info-value" id="ticketPhoneDisplay">---</div>
+            </div>
+          </div>
+
+          <div class="ticket-divider">Congratulation</div>
+
+          <div class="ticket-footer">
+            Sally Joy Camps Ticketing System
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="downloadTicket()">
+          <i class="fas fa-download"></i> Download
+        </button>
+        <button class="modal-btn modal-btn-secondary" onclick="shareTicket()">
+          <i class="fas fa-share-alt"></i> Share
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PWA Installation
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'flex';
+    });
+
+    document.getElementById('installBtn')?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        document.getElementById('installBtn').style.display = 'none';
+      }
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    // QR Code Scanner
+    let html5QrcodeScanner;
+
+    function initScanner() {
+      if (!html5QrcodeScanner) {
+        html5QrcodeScanner = new Html5Qrcode('scanner-container');
+        
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length) {
+            html5QrcodeScanner.start(
+              devices[0].id,
+              { fps: 10, qrbox: { width: 250, height: 250 } },
+              onScanSuccess,
+              onScanError
+            );
+          }
+        });
+      }
+    }
+
+    function stopScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().catch(() => {});
+      }
+    }
+
+    function onScanSuccess(decodedText) {
+      console.log('Scanned:', decodedText);
+      try {
+        // Try to parse as JSON first
+        const ticketData = JSON.parse(decodedText);
+        showTicket(ticketData);
+        // Stop scanning temporarily
+        stopScanner();
+      } catch (e) {
+        console.log('Not JSON, treating as plain text');
+        // If not JSON, create a ticket object from the text
+        showTicket({
+          name: 'Guest',
+          phone: decodedText,
+          type: '80',
+          number: 'SCANNED',
+          date: new Date().toLocaleDateString(),
+          payment: 'Unknown'
+        });
+        stopScanner();
+      }
+    }
+
+    function onScanError(error) {
+      // Silent error handling
+    }
+
+    // Page Navigation
+    function switchPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      
+      const pageEl = document.getElementById(page + '-page');
+      const navEl = event?.target?.closest('.nav-item') || 
+                    document.querySelector(`[onclick="switchPage('${page}')"]`)?.closest('.nav-item');
+      
+      if (pageEl) pageEl.classList.add('active');
+      if (navEl) navEl.classList.add('active');
+
+      if (page === 'checkin') {
+        initScanner();
+      } else {
+        stopScanner();
+      }
+    }
+
+    // Ticket Generation
+    document.getElementById('generateBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('customerName').value;
+      const phone = document.getElementById('phoneNumber').value;
+      const ticketTypeSelect = document.getElementById('ticketType');
+      const type = ticketTypeSelect.options[ticketTypeSelect.selectedIndex].value;
+      const typeText = ticketTypeSelect.options[ticketTypeSelect.selectedIndex].text;
+      const payment = document.getElementById('paymentMethod').value;
+
+      if (name && phone && type !== 'Select ticket type' && payment !== 'Select payment method') {
+        const ticketData = {
+          name,
+          phone,
+          type,
+          typeText,
+          payment,
+          number: 'A' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+          date: new Date().toLocaleDateString()
+        };
+
+        showTicket(ticketData);
+        
+        // Update stats
+        updateStats(type);
+        
+        // Clear form
+        document.getElementById('customerName').value = '';
+        document.getElementById('phoneNumber').value = '';
+        ticketTypeSelect.value = 'Select ticket type';
+        document.getElementById('paymentMethod').value = 'Select payment method';
+      } else {
+        alert('Please fill in all fields');
+      }
+    });
+
+    // Ticket Display
+    function showTicket(data) {
+      try {
+        const ticket = typeof data === 'string' ? JSON.parse(data) : data;
+        
+        console.log('Displaying ticket:', ticket);
+        
+        // Update ticket info
+        document.getElementById('ticketNameDisplay').textContent = ticket.name || 'Guest';
+        document.getElementById('ticketPhoneDisplay').textContent = ticket.phone || '---';
+        
+        const typeMap = { '50': 'EARLY BIRD', '80': 'NORMAL', '150': 'VIP' };
+        document.getElementById('ticketTypeDisplay').textContent = typeMap[ticket.type] || 'TICKET';
+        document.getElementById('ticketNumberDisplay').textContent = `Nomor: ${ticket.number}`;
+
+        // Get modal element
+        const modal = document.getElementById('ticketModal');
+        console.log('Modal element:', modal);
+        
+        // Force show modal
+        modal.style.visibility = 'visible';
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
+        modal.classList.add('active');
+        
+        console.log('Modal should be visible now');
+        
+        // Generate QR code
+        setTimeout(() => {
+          const qrContainer = document.getElementById('qrContainer');
+          if (!qrContainer) {
+            console.error('QR container not found');
+            return;
+          }
+          
+          qrContainer.innerHTML = '<div style="width: 120px; height: 120px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 0.8em; border-radius: 8px; border: 2px solid var(--gold);">Generating...</div>';
+          
+          if (window.QRCode) {
+            try {
+              const qrCanvas = document.createElement('canvas');
+              QRCode.toCanvas(qrCanvas, JSON.stringify(ticket), 
+                { 
+                  width: 120,
+                  margin: 1,
+                  color: { dark: '#000000', light: '#FFFFFF' }
+                }, 
+                (err) => {
+                  if (err) {
+                    console.error('QR Error:', err);
+                    qrContainer.innerHTML = '<div style="width: 120px; height: 120px; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: var(--text-secondary); border: 2px solid var(--gold); border-radius: 8px;">Error</div>';
+                  } else {
+                    qrContainer.innerHTML = '';
+                    qrContainer.appendChild(qrCanvas);
+                    console.log('QR Code generated successfully');
+                  }
+                }
+              );
+            } catch (qrErr) {
+              console.error('QR Generation error:', qrErr);
+              qrContainer.innerHTML = '<div style="width: 120px; height: 120px; background: #eee; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); border-radius: 8px;">QR</div>';
+            }
+          } else {
+            console.warn('QRCode library not loaded');
+            // Wait a bit more and try again
+            setTimeout(() => {
+              if (window.QRCode) {
+                const qrCanvas = document.createElement('canvas');
+                QRCode.toCanvas(qrCanvas, JSON.stringify(ticket), { width: 120, margin: 1 }, () => {
+                  qrContainer.innerHTML = '';
+                  qrContainer.appendChild(qrCanvas);
+                });
+              }
+            }, 500);
+          }
+        }, 100);
+
+      } catch (e) {
+        console.error('Invalid ticket data', e);
+        alert('Error: ' + e.message);
+      }
+    }
+
+    function closeTicket() {
+      const modal = document.getElementById('ticketModal');
+      modal.classList.remove('active');
+      modal.style.opacity = '0';
+      modal.style.visibility = 'hidden';
+      modal.style.pointerEvents = 'none';
+    }
+
+    function downloadTicket() {
+      alert('Download feature coming soon!');
+    }
+
+    function shareTicket() {
+      const name = document.getElementById('ticketNameDisplay').textContent;
+      if (navigator.share) {
+        navigator.share({
+          title: 'Sally Joy Camps Ticket',
+          text: `I have a ticket for ${name}! 🎫`
+        });
+      } else {
+        alert('Ticket details copied!');
+      }
+    }
+
+    function updateStats(type) {
+      let sold = parseInt(document.querySelector('.metric-value').textContent) || 0;
+      let revenue = parseInt(document.getElementById('dashRevenue').textContent.replace('K', '')) || 0;
+
+      sold++;
+      revenue += parseInt(type);
+
+      document.querySelector('.metric-value').textContent = sold;
+      document.getElementById('dashRevenue').textContent = 'K' + revenue;
+      document.getElementById('dashSold').textContent = sold;
+
+      // Update breakdown
+      const typeCount = document.getElementById('dash' + (type === '50' ? 'EarlyBird' : type === '80' ? 'Normal' : 'VIP'));
+      if (typeCount) typeCount.textContent = (parseInt(typeCount.textContent) || 0) + 1;
+    }
+
+    // Load QRCode library with proper error handling
+    function loadQRCodeLibrary() {
+      if (window.QRCode) {
+        console.log('QRCode library already loaded');
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('QRCode library loaded successfully');
+      };
+      script.onerror = () => {
+        console.error('Failed to load QRCode library');
+      };
+      document.head.appendChild(script);
+    }
+
+    // Load library immediately
+    loadQRCodeLibrary();
+
+    // Also load when DOM is ready
+    document.addEventListener('DOMContentLoaded', loadQRCodeLibrary);
+  </script>
 </body>
 </html>

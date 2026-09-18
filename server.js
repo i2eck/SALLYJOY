@@ -65,6 +65,42 @@ db.serialize(() => {
       FOREIGN KEY(seller_id) REFERENCES sellers(id)
     )
   `);
+
+  // Migration: add any columns that older deployed databases are missing.
+  // CREATE TABLE IF NOT EXISTS above does nothing if the table already
+  // exists, so as the schema evolves, existing databases (like the one
+  // already deployed on Railway) need these ALTERs to catch up.
+  function migrateTable(table, requiredColumns) {
+    db.all(`PRAGMA table_info(${table})`, (err, columns) => {
+      if (err) {
+        console.error(`Migration check failed for ${table}:`, err.message);
+        return;
+      }
+      const existing = new Set(columns.map((c) => c.name));
+      requiredColumns.forEach(({ name, def }) => {
+        if (!existing.has(name)) {
+          db.run(`ALTER TABLE ${table} ADD COLUMN ${name} ${def}`, (alterErr) => {
+            if (alterErr) {
+              console.error(`Failed to add column ${table}.${name}:`, alterErr.message);
+            } else {
+              console.log(`Migrated ${table} table: added column "${name}"`);
+            }
+          });
+        }
+      });
+    });
+  }
+
+  migrateTable('tickets', [
+    { name: 'sold_by', def: 'TEXT' },
+    { name: 'location', def: 'TEXT' },
+    { name: 'payment_method', def: 'TEXT' },
+  ]);
+
+  migrateTable('sales', [
+    { name: 'seller_id', def: 'TEXT' },
+    { name: 'location', def: 'TEXT' },
+  ]);
 });
 
 // Helper functions

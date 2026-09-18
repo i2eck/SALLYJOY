@@ -14,6 +14,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Client-side routes that need to load app.html directly (no matching
+// static file exists for these paths, so express.static falls through
+// and Express 404s unless we serve the SPA shell explicitly).
+app.get(['/ticket/:id', '/admin', '/checkin'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'app.html'));
+});
+
 // Database setup
 const db = new sqlite3.Database('./tickets.db', (err) => {
   if (err) console.error(err.message);
